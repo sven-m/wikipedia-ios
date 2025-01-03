@@ -188,11 +188,6 @@ extern NSString *const WMFEditPencil;
  */
 @property (nonatomic, copy, readonly, nullable) NSString *wmf_contentLanguageCode;
 
-/**
- * Returns a @c CLLocation object representing the place to be shown on the map, if the URL represents a Places-tab deeplink, otherwise @c nil .
- */
-@property (nonatomic, copy, readonly, nullable) CLLocation *wmf_placesLinkLocation;
-
 #pragma mark - Introspection
 
 /**

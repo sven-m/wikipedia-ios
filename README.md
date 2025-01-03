@@ -54,9 +54,19 @@ to invest time in it.
 ### URL
 
 On iOS, the only proper way to launch one app from another app while passing
-parameters is using URLs.
+parameters is using URLs. The chosen method is to use a custom scheme. As the
+Wikipedia app already has custom schemes implemented, we make use of the already
+ available `wikipedia:` scheme.
 
-The chosen method is to impement a custom scheme. The rationale is below.
+The following command allows us to test launching URLs on the simulator, without
+needing a demo app just yet:
+```
+xcrun simctl openurl booted 'wikipedia://places?WMFPlacesLatLong=52.3547498,4.8339215'
+```
+
+
+
+#### Custom HTTPS URLs (alternative considered)
 
 The app already makes use of the universal links feature of iOS, so we could
 choose to piggy back on this implementation. This would mean we would need to

@@ -382,6 +382,7 @@
 		0EF8634E1C19E02700006D2D /* WMFEmptyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EF8634D1C19E02700006D2D /* WMFEmptyView.xib */; };
 		0EF863511C19E4F100006D2D /* WMFEmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF863501C19E4F100006D2D /* WMFEmptyView.m */; };
 		19A175F095F5197BA20EA8BA /* NSUserActivity+WMFExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 19A172FA6AE61E76FCEF4259 /* NSUserActivity+WMFExtensionsTest.m */; };
+		268F30EE2D281FB500961595 /* CLLocation+Parsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268F30ED2D281FAC00961595 /* CLLocation+Parsing.swift */; };
 		3717C38C2CAB2A0D00978DB2 /* YearInReviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3717C38B2CAB2A0700978DB2 /* YearInReviewCoordinator.swift */; };
 		3717C38D2CAB2A0D00978DB2 /* YearInReviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3717C38B2CAB2A0700978DB2 /* YearInReviewCoordinator.swift */; };
 		3717C38E2CAB2A0D00978DB2 /* YearInReviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3717C38B2CAB2A0700978DB2 /* YearInReviewCoordinator.swift */; };
@@ -3297,6 +3298,7 @@
 		263621282D27327F009D6176 /* abnamro-places.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "abnamro-places.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		263621372D273281009D6176 /* abnamro-placesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "abnamro-placesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		263621412D273281009D6176 /* abnamro-placesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "abnamro-placesUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		268F30ED2D281FAC00961595 /* CLLocation+Parsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Parsing.swift"; sourceTree = "<group>"; };
 		3717C38B2CAB2A0700978DB2 /* YearInReviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearInReviewCoordinator.swift; sourceTree = "<group>"; };
 		41CCB67321CC1F9700206B47 /* SavedArticlesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedArticlesCollectionViewController.swift; sourceTree = "<group>"; };
 		41FCAA3521C844CB001D8411 /* ReadingListEntryCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListEntryCollectionViewController.swift; sourceTree = "<group>"; };
@@ -8351,6 +8353,7 @@
 				B0E804A51C0CE0B40065EBC0 /* NSString+WMFExtras.m */,
 				0E5DC8611C6D716100C39A6F /* NSUserActivity+WMFExtensions.h */,
 				0E5DC8621C6D716100C39A6F /* NSUserActivity+WMFExtensions.m */,
+				268F30ED2D281FAC00961595 /* CLLocation+Parsing.swift */,
 				D8494ADC1D6C85C500337433 /* NSUserDefaults+WMFExtensions.swift */,
 				B0B423491EF204C200D3DC4C /* On This Day */,
 				D8E892242176124F00587F61 /* PeriodicWorker.swift */,
@@ -11225,6 +11228,7 @@
 				D844D9F31D6CC0220042D692 /* MWKLicense.m in Sources */,
 				0042808D25E6E395004945B3 /* MTLValueTransformer.m in Sources */,
 				D85BD2471F8F9D6900D0D478 /* NSManagedObjectContext+WMFKeyValue.m in Sources */,
+				268F30EE2D281FB500961595 /* CLLocation+Parsing.swift in Sources */,
 				836944DC1F572452007BD6DA /* ThemeableTextField.swift in Sources */,
 				D82972951E4361C60061550A /* WMFKeyValue+CoreDataProperties.m in Sources */,
 				D8C41DDB23FC09EE00353DCE /* NSManagedObjectContext+History.swift in Sources */,

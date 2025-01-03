@@ -1,6 +1,9 @@
 #import <WMF/NSUserActivity+WMFExtensions.h>
 #import <WMF/WMF-Swift.h>
 
+/// Represents a dictionary key / query string parameter name indicating a "<lat>,<long>" string value.
+static NSString * const WMFPlacesLatLongKey = @"WMFPlacesLatLong";
+
 @import CoreSpotlight;
 @import MobileCoreServices;
 
@@ -62,15 +65,26 @@ __attribute__((annotate("returns_localized_nsstring"))) static inline NSString *
 + (instancetype)wmf_placesActivityWithURL:(NSURL *)activityURL {
     NSURLComponents *components = [NSURLComponents componentsWithURL:activityURL resolvingAgainstBaseURL:NO];
     NSURL *articleURL = nil;
+    NSString *location = nil;
     for (NSURLQueryItem *item in components.queryItems) {
         if ([item.name isEqualToString:@"WMFArticleURL"]) {
             NSString *articleURLString = item.value;
             articleURL = [NSURL URLWithString:articleURLString];
             break;
         }
+      
+        if ([item.name isEqualToString:WMFPlacesLatLongKey]) {
+            location = item.value;
+        }
     }
     NSUserActivity *activity = [self wmf_pageActivityWithName:@"Places"];
     activity.webpageURL = articleURL;
+    if (location) {
+        NSMutableDictionary *userInfo = [activity.userInfo mutableCopy];
+        userInfo[WMFPlacesLatLongKey] = location;
+        activity.userInfo = [userInfo copy];
+    }
+    
     return activity;
 }
 
@@ -230,8 +244,6 @@ __attribute__((annotate("returns_localized_nsstring"))) static inline NSString *
         return WMFUserActivityTypeContent;
     } else if ([self.activityType isEqualToString:CSQueryContinuationActionType]) {
         return WMFUserActivityTypeSearchResults;
-    } else if (self.webpageURL.wmf_placesLinkLocation) {
-        return WMFUserActivityTypePlacesLink;
     } else {
         return WMFUserActivityTypeLink;
     }
@@ -268,6 +280,15 @@ __attribute__((annotate("returns_localized_nsstring"))) static inline NSString *
 
 - (NSURL *)wmf_contentURL {
     return self.userInfo[@"WMFURL"];
+}
+
+- (CLLocation *)wmf_placesLinkLocation {
+  NSString *locationString = self.userInfo[WMFPlacesLatLongKey];
+  if (!locationString) {
+    return nil;
+  }
+  
+  return [[CLLocation alloc] initWithCommaSeparatedString:locationString];
 }
 
 + (NSURLComponents *)wmf_baseURLComponentsForActivityOfType:(WMFUserActivityType)type {
