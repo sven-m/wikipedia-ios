@@ -251,11 +251,6 @@ class PlacesViewController: ViewController, UISearchBarDelegate, ArticlePopoverV
         
         locationManager.startMonitoringLocation()
         mapView.showsUserLocation = true
-      
-      DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-        NSLog("Panning woohoo! 🍳")
-        self.zoomAndPanMapView(toLocation: CLLocation(latitude: 52.3547498, longitude: 4.8339215))
-      }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
