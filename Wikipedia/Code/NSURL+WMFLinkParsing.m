@@ -288,6 +288,14 @@ static id wmf_languageVariantAssociatedObjectKey;
     }
 }
 
+- (CLLocation *)wmf_placesLinkLocation {
+  if (![self.fragment hasPrefix:@"coordinates="]) {
+    return nil;
+  }
+  
+  return [[CLLocation alloc] initWithLatitude:1 longitude:1];
+}
+
 @end
 
 #pragma mark - WMFInMemoryURLKey

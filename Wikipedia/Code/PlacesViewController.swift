@@ -1939,6 +1939,13 @@ class PlacesViewController: ViewController, UISearchBarDelegate, ArticlePopoverV
         currentSearch = nil // will cause the default search to perform after re-centering
         recenterOnUserLocation(self)
     }
+  
+    /// Provides the entry point for the location deep-link into the Places tab
+    /// - Parameter location: the location to pan the map to
+    @objc public func showLocation(_ location: CLLocation) {
+        panMapToNextLocationUpdate = false // suppresses the location update triggered after initial appearance of places tab
+        zoomAndPanMapView(toLocation: location)
+    }
     
     @objc public func showArticleURL(_ articleURL: URL) {
         guard let article = dataStore.fetchArticle(with: articleURL), let title = articleURL.wmf_title,

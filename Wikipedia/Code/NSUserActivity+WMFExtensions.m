@@ -230,6 +230,8 @@ __attribute__((annotate("returns_localized_nsstring"))) static inline NSString *
         return WMFUserActivityTypeContent;
     } else if ([self.activityType isEqualToString:CSQueryContinuationActionType]) {
         return WMFUserActivityTypeSearchResults;
+    } else if (self.webpageURL.wmf_placesLinkLocation) {
+        return WMFUserActivityTypePlacesLink;
     } else {
         return WMFUserActivityTypeLink;
     }

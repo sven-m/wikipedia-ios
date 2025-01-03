@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <WMF/NSURL+WMFLinkParsing.h>
+#import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -186,6 +187,11 @@ extern NSString *const WMFEditPencil;
  *  Returns @c wmf_languageVariantCode if non-nil and non-empty string, @c wmf_languageCode otherwise
  */
 @property (nonatomic, copy, readonly, nullable) NSString *wmf_contentLanguageCode;
+
+/**
+ * Returns a @c CLLocation object representing the place to be shown on the map, if the URL represents a Places-tab deeplink, otherwise @c nil .
+ */
+@property (nonatomic, copy, readonly, nullable) CLLocation *wmf_placesLinkLocation;
 
 #pragma mark - Introspection
 
