@@ -1,3 +1,43 @@
+# ABN AMRO iOS Assignment Preamble
+
+This is an adjusted version of the Wikipedia iOS app project, containing the
+implementation of ABN Amro's iOS assignment.
+
+Following this top-level section is the rest of the Wikipedia iOS project's original README content.
+
+## How to run the customized Wikipedia app and the demo app
+
+- Open the project in Xcode
+- Select a simulator target (see design decisions)
+- Run the `Wikipedia` app target
+- Run the `abnamro-places` app target
+
+## Requirements
+
+- Wikipedia iOS can be called from other apps with a specific URL to show a specific location in the places tab
+- A demo app that demonstrates this feature
+
+The specific requirements are in `ios-assignment-2024.pdf`, located in the root of the repository.
+
+## Project structure
+
+The implementation is housed in a fork of the Wikipedia iOS repository, in the branch `feature/abnamro-ios-places`. The reason for this is simply because it is easy.
+
+The changes to the wikipedia app have been made in the `Wikipedia` app target in the main project.
+
+The additional demo app and its tests are implemented using a set of targets in the main project:
+- `abmamro-places`
+- `abmamro-placesTests`
+- `abmamro-placesUITests`
+
+## Design Decisions / Rationale
+
+tbd
+
+## Remarks
+
+tbd
+
 # Wikipedia iOS
 The official Wikipedia iOS app.
 
