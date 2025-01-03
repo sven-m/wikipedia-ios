@@ -39,7 +39,59 @@ the main project:
 
 ## Design Decisions / Rationale
 
-tbd
+### Signing and running on device
+
+I am not supporting running this version of Wikipedia on a device.
+
+I have deliberately left the team to Wikipedia's original `AKK7J2GV64` and
+decided _not_ to change the bundle IDs, which would have been needed to support
+running it on a device. Changing the bundle ID may require references to this 
+bundle ID in other places to be changed and an App ID to be setup in my own
+(paid) account. I think this is not something of interest in the assignment, and
+as it would take time away from other more important topics, I am choosing not
+to invest time in it. 
+
+### URL
+
+On iOS, the only proper way to launch one app from another app while passing
+parameters is using URLs.
+
+The chosen method is to impement a custom scheme. The rationale is below.
+
+The app already makes use of the universal links feature of iOS, so we could
+choose to piggy back on this implementation. This would mean we would need to
+need to use the `https` scheme in the URL and use one of its associated domains
+as the host, such as `wikipedia.org`, but then add either a custom path, query 
+string parameter or fragment.
+
+Examples:
+```
+https://wikipedia.org/wiki/places/52.3547498,4.8339215
+https://wikipedia.org/wiki?coordinates=52.3547498,4.8339215
+https://wikipedia.org/wiki/#coordinates=52.3547498,4.8339215
+```
+
+The
+[apple-app-site-association](https://wikipedia.org/apple-app-site-association)
+file hosted by Wikipedia lists several `applinks` items, all of them specifying
+the `/wiki/*` subpath, which means we have to use this subpath, otherwise our 
+links will not trigger the app, but simply to to the website.
+
+This can work, but implementing it like this still does not entirely prevent the
+possibility of the browser being used to open these URLs, which will lead to
+confusing results, such as a 4xx, 5xx response or simply loading the Wikipedia 
+homepage wihout anything happening.
+
+Before moving on to the custom scheme implementation, we will use the universal
+links as an intermediate version to reduce the scope of single changes.
+
+Before having implemented the demo application or UI tests, we use the following
+command-line command to test the URLs:
+
+```
+xcrun simctl openurl booted 'https://en.wikipedia.org/wiki#coordinates=1,2'
+```
+
 
 ## Remarks
 
