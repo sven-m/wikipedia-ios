@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 @Observable
 class APILocationsModel {
   let fetch: () async throws -> [APILocation]
@@ -11,7 +12,6 @@ class APILocationsModel {
     self.fetch = fetch
   }
   
-  @MainActor
   func refresh() async {
     do {
       locations = Self.deduplicated(try await self.fetch())
