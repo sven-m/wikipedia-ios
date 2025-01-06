@@ -73,6 +73,9 @@ struct AddNewSavedLocationView: View {
         }
       }
       .navigationTitle("Add New Location")
+      
+      /// Having a MapKit map in the Form makes the `.largeTitle` mode
+      /// give weird results, so let's make it `.inline` to save some time
       .navigationBarTitleDisplayMode(.inline)
     }
   }
