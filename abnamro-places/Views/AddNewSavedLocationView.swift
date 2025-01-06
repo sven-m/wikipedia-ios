@@ -28,7 +28,14 @@ struct AddNewSavedLocationView: View {
         }
         
         Section {
-          Map(position: $position, interactionModes: [.pan, .zoom])
+          Map(position: $position, interactionModes: [.pan, .zoom]) {
+            ForEach(model.entities) { entity in
+              Marker(
+                entity.name,
+                coordinate: CLLocationCoordinate2DMake(entity.latitude,
+                                                       entity.longitude))
+            }
+          }
             .onMapCameraChange(frequency: .continuous) { mapCameraUpdateContext in
               draft.latitude = mapCameraUpdateContext.region.center.latitude
               draft.longitude = mapCameraUpdateContext.region.center.longitude
