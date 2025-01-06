@@ -6,7 +6,7 @@ class SavedLocationsModel {
   private let container: ModelContainer
   private let context: ModelContext
   
-  var entities: [LocationEntity]?
+  var entities: [LocationEntity] = []
   var lastError: Error?
   
   var draftLocation: LocationEntity?
@@ -20,8 +20,6 @@ class SavedLocationsModel {
   }
   
   func delete(indexSet: IndexSet) {
-    guard let entities else { return }
-    
     for index in indexSet {
       context.delete(entities[index])
     }
@@ -29,9 +27,12 @@ class SavedLocationsModel {
     refresh()
   }
   
-  private func refresh() {
+  func refresh() {
+    lastError = nil
     do {
-      entities = try context.fetch(FetchDescriptor<LocationEntity>())
+      entities = try context.fetch(
+        FetchDescriptor<LocationEntity>(sortBy: [.init(\.name)])
+      )
     } catch {
       lastError = error
     }

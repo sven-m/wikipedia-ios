@@ -8,7 +8,7 @@ struct SavedLocationsView: View {
     NavigationStack {
       List {
         Section {
-          ForEach(model.entities ?? []) { entity in
+          ForEach(model.entities) { entity in
             
             LocationRowView(name: entity.name,
                             latitude: entity.latitude,
@@ -18,12 +18,12 @@ struct SavedLocationsView: View {
             model.delete(indexSet: indexSet)
           }
         } footer: {
-          if model.entities?.isEmpty == false {
+          if !model.entities.isEmpty {
             Text("Swipe left to delete locations")
           }
         }
         
-        if model.entities?.isEmpty == false {
+        if !model.entities.isEmpty {
           Button {
             model.draftNewLocation()
           } label: {
@@ -36,11 +36,11 @@ struct SavedLocationsView: View {
           }
         }
       }
-      .scrollDisabled(true)
+      .scrollDisabled(model.entities.isEmpty)
       .overlay {
         if let lastError = model.lastError {
           failureView(error: lastError)
-        } else if model.entities?.isEmpty == true {
+        } else if model.entities.isEmpty {
           noSavedLocationsView
         }
       }
@@ -55,10 +55,14 @@ struct SavedLocationsView: View {
   
   func failureView(error: Error) -> some View {
     ContentUnavailableView {
-      Label("Failed to Load Saved Locations",
+      Label("Error Occurred",
             systemImage: "exclamationmark.octagon.fill")
     } description: {
       Text(error.localizedDescription)
+    } actions: {
+      Button("Reload") {
+        model.refresh()
+      }
     }
   }
   
@@ -75,8 +79,19 @@ struct SavedLocationsView: View {
   }
 }
 
-#Preview {
+#Preview("Regular") {
   @Previewable @State var model = SavedLocationsModel.preview()
+  
+  SavedLocationsView(model: model)
+}
+
+#Preview("Error") {
+  @Previewable @State var model = {
+    let model = SavedLocationsModel.preview()
+    model.entities = []
+    model.lastError = NSError(domain: "preview", code: -1)
+    return model
+  }()
   
   SavedLocationsView(model: model)
 }
