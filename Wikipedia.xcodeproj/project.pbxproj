@@ -4847,9 +4847,9 @@
 				Model/APILocation.swift,
 				Model/APILocationsModel.swift,
 				Model/Coordinates.swift,
-				"Model/Coordinates+WikipediaURLConvertible.swift",
 				Model/SavedLocation.swift,
 				Model/SavedLocationsModel.swift,
+				"Model/URL+Wikipedia.swift",
 				Views/LocationRowView.swift,
 			);
 			target = 263621362D273281009D6176 /* abnamro-placesTests */;

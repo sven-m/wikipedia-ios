@@ -1,5 +1,6 @@
 import Foundation
 
+/// A function that produces `APILocation` objects, as fetched from the server
 func fetchAPILocations() async throws (LocationsFetchError) -> [APILocation] {
   let (data, response): (Data, URLResponse)
   do {

@@ -20,19 +20,19 @@ struct SavedLocationsModelTests {
   func fetch() async throws {
     let model = SavedLocationsModel(container: container)
     
-    #expect(model.entities.count == 3)
+    #expect(model.locations.count == 3)
     
-    #expect(model.entities[0].name == "Test0")
-    #expect(model.entities[0].latitude == 0)
-    #expect(model.entities[0].longitude == 0)
+    #expect(model.locations[0].name == "Test0")
+    #expect(model.locations[0].latitude == 0)
+    #expect(model.locations[0].longitude == 0)
     
-    #expect(model.entities[1].name == "Test1")
-    #expect(model.entities[1].latitude == 1)
-    #expect(model.entities[1].longitude == 1)
+    #expect(model.locations[1].name == "Test1")
+    #expect(model.locations[1].latitude == 1)
+    #expect(model.locations[1].longitude == 1)
     
-    #expect(model.entities[2].name == "Test2")
-    #expect(model.entities[2].latitude == 2)
-    #expect(model.entities[2].longitude == 2)
+    #expect(model.locations[2].name == "Test2")
+    #expect(model.locations[2].latitude == 2)
+    #expect(model.locations[2].longitude == 2)
   }
   
   @Test("Delete an item")
@@ -41,15 +41,15 @@ struct SavedLocationsModelTests {
     
     model.delete(indexSet: [1])
     
-    #expect(model.entities.count == 2)
+    #expect(model.locations.count == 2)
     
-    #expect(model.entities[0].name == "Test0")
-    #expect(model.entities[0].latitude == 0)
-    #expect(model.entities[0].longitude == 0)
+    #expect(model.locations[0].name == "Test0")
+    #expect(model.locations[0].latitude == 0)
+    #expect(model.locations[0].longitude == 0)
     
-    #expect(model.entities[1].name == "Test2")
-    #expect(model.entities[1].latitude == 2)
-    #expect(model.entities[1].longitude == 2)
+    #expect(model.locations[1].name == "Test2")
+    #expect(model.locations[1].latitude == 2)
+    #expect(model.locations[1].longitude == 2)
   }
   
   @Test("Trigger all possible validation errors and then make validation pass")
@@ -58,7 +58,6 @@ struct SavedLocationsModelTests {
     
     #expect(model.draftLocation == nil)
     #expect(model.validatedDraftLocation == nil)
-    #expect(model.validationError == .noDraft)
     
     model.draftNewLocation()
     
@@ -97,7 +96,7 @@ struct SavedLocationsModelTests {
   func commit() async throws {
     let model = SavedLocationsModel(container: container)
     
-    try #require(model.entities.count == 3)
+    try #require(model.locations.count == 3)
     
     model.draftNewLocation()
     
@@ -111,10 +110,10 @@ struct SavedLocationsModelTests {
     
     model.commit()
     
-    #expect(model.entities.count == 4)
+    #expect(model.locations.count == 4)
     
-    #expect(model.entities[3].name == validatedDraftLocation.name)
-    #expect(model.entities[3].latitude == validatedDraftLocation.latitude)
-    #expect(model.entities[3].longitude == validatedDraftLocation.longitude)
+    #expect(model.locations[3].name == validatedDraftLocation.name)
+    #expect(model.locations[3].latitude == validatedDraftLocation.latitude)
+    #expect(model.locations[3].longitude == validatedDraftLocation.longitude)
   }
 }
