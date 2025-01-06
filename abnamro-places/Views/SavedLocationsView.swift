@@ -8,19 +8,19 @@ struct SavedLocationsView: View {
     NavigationStack {
       List {
         Section {
-          ForEach(model.entities) { entity in
+          ForEach(model.locations) { entity in
             LocationRowView(name: entity.name, coordinates: entity.coordinates)
           }
           .onDelete { indexSet in
             model.delete(indexSet: indexSet)
           }
         } footer: {
-          if !model.entities.isEmpty {
+          if !model.locations.isEmpty {
             Text("Swipe left to delete locations")
           }
         }
         
-        if !model.entities.isEmpty {
+        if !model.locations.isEmpty {
           Button {
             model.draftNewLocation()
           } label: {
@@ -33,11 +33,11 @@ struct SavedLocationsView: View {
           }
         }
       }
-      .scrollDisabled(model.entities.isEmpty)
+      .scrollDisabled(model.locations.isEmpty)
       .overlay {
         if let lastError = model.lastError {
           failureView(error: lastError)
-        } else if model.entities.isEmpty {
+        } else if model.locations.isEmpty {
           noSavedLocationsView
         }
       }
@@ -83,7 +83,7 @@ struct SavedLocationsView: View {
 #Preview("Error") {
   @Previewable @State var model = {
     let model = SavedLocationsModel.preview()
-    model.entities = []
+    model.locations = []
     model.lastError = NSError(domain: "preview", code: -1)
     return model
   }()

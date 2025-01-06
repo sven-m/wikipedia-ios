@@ -29,7 +29,7 @@ struct AddNewSavedLocationView: View {
         
         Section {
           Map(position: $position, interactionModes: [.pan, .zoom]) {
-            ForEach(model.entities) { entity in
+            ForEach(model.locations) { entity in
               Marker(
                 entity.name,
                 coordinate: CLLocationCoordinate2DMake(entity.latitude,
@@ -92,9 +92,12 @@ struct AddNewSavedLocationView: View {
     AddNewSavedLocationView(draft: draftLocation,
                             model: model)
   } else {
+    // Put a new draft in the model, to start editing a new one
     Button("New") {
       model.draftLocation = SavedLocation()
     }
+    
+    // Replace model, discarding previously saved items
     Button("Reset") {
       model = SavedLocationsModel.preview()
       model.draftLocation = SavedLocation()

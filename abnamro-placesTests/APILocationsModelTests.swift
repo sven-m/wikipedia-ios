@@ -1,10 +1,11 @@
+import Foundation
 import Testing
-@testable import abnamro_places
 
 @MainActor
 struct APILocationsModelTests {
   
-  @Test func deduplication() async throws {
+  @Test("Any duplicates in the API response are filtered out")
+  func deduplication() async throws {
     let model = APILocationsModel {
       [
         APILocation(name: "Test", latitude: 1, longitude: 2),
@@ -15,6 +16,19 @@ struct APILocationsModelTests {
     await model.refresh()
     
     #expect(model.locations == [APILocation(name: "Test", latitude: 1, longitude: 2)])
+  }
+  
+  @Test("Errors are propagated")
+  func errors() async throws {
+    let error = NSError(domain: "test", code: -10)
+    
+    let model = APILocationsModel {
+      throw error
+    }
+    
+    await #expect(throws: error) {
+      try await model.fetch()
+    }
   }
   
 }
