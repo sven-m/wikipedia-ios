@@ -1,11 +1,11 @@
 
-struct Location: Hashable {
+struct APILocation: Hashable {
   var name: String?
   var latitude: Double
   var longitude: Double
 }
 
-extension Location: Codable {
+extension APILocation: Codable {
   enum CodingKeys: String, CodingKey {
     case name
     case latitude = "lat"
