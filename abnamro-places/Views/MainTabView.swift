@@ -2,7 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct MainTabView: View {
-  @State var apiLocationsModel = APILocationsModel(fetch: fetchAPILocations)
+  var apiLocationsModel: APILocationsModel
+  var savedLocationsModel: Result<SavedLocationsModel, Error>
   
   var body: some View {
     TabView {
@@ -12,17 +13,45 @@ struct MainTabView: View {
           Image(systemName: "cloud")
         }
       
-      SavedLocationsView()
+      savedLocationsTabContent
         .tabItem {
           Text("Saved")
           Image(systemName: "folder")
         }
     }
   }
+  
+  @ViewBuilder
+  var savedLocationsTabContent: some View {
+    switch savedLocationsModel {
+    case .success(let model):
+      SavedLocationsView(model: model)
+    case .failure(let error):
+      ContentUnavailableView {
+        Label("Failed to Load Saved Locations",
+              systemImage: "exclamationmark.octagon.fill")
+      } description: {
+        Text(error.localizedDescription)
+      }
+    }
+  }
 }
 
-#Preview {
+#Preview("Regular") {
+  @Previewable @State var apiLocationsModel = APILocationsModel.preview()
+  @Previewable @State var savedLocationsModel = SavedLocationsModel.preview()
+  
+  MainTabView(
+    apiLocationsModel: apiLocationsModel,
+    savedLocationsModel: .success(savedLocationsModel)
+  )
+}
+
+#Preview("Database Error") {
   @Previewable @State var apiLocationsModel = APILocationsModel.preview()
   
-  MainTabView(apiLocationsModel: apiLocationsModel)
+  MainTabView(
+    apiLocationsModel: apiLocationsModel,
+    savedLocationsModel: .failure(NSError(domain: "preview", code: -1))
+  )
 }

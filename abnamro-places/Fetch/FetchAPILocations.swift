@@ -1,13 +1,9 @@
 import Foundation
 
-private let urlString = "https://raw.githubusercontent.com/abnamrocoesd/assignment-ios/main/locations.json"
-
 func fetchAPILocations() async throws (LocationsFetchError) -> [Location] {
-  let url = URL(string: urlString)!
-  
   let (data, response): (Data, URLResponse)
   do {
-    (data, response) = try await URLSession.shared.data(from: url)
+    (data, response) = try await URLSession.shared.data(from: .api)
   } catch {
     throw .network(error)
   }

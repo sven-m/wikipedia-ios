@@ -14,7 +14,7 @@ class APILocationsModel {
   func refresh() async {
     do {
       locations = deduplicated(try await self.fetch())
-
+      
     } catch {
       self.error = error
     }

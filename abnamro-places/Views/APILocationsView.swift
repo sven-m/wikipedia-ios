@@ -9,7 +9,9 @@ struct APILocationsView: View {
       List {
         Section {
           ForEach(model.locations ?? [], id: \.self) { location in
-            row(location: location)
+            LocationRowView(name: location.name,
+                            latitude: location.latitude,
+                            longitude: location.longitude)
           }
         } footer: {
           if model.locations != nil {
@@ -43,35 +45,6 @@ struct APILocationsView: View {
   }
   
   @ViewBuilder
-  private func row(location: Location) -> some View {
-    Button {
-      openURL(location: location)
-    } label: {
-      Label {
-        let rowData = LocationRowData(location: location)
-        
-        VStack(alignment: .leading) {
-          Text(rowData.title)
-          Text(rowData.subtitle)
-            .font(.caption)
-            .foregroundStyle(.secondary)
-          
-        }
-        .tint(.primary)
-      } icon: {
-        Image(systemName: "mappin.circle")
-      }
-    }
-  }
-  
-  private func openURL(location: Location) {
-    if let url = URL.wikipediaURL(latitude: location.latitude,
-                                  longitude: location.longitude) {
-      UIApplication.shared.open(url)
-    }
-  }
-  
-  @ViewBuilder
   private var contentUnavailableView: some View {
     if let error = model.error {
       ContentUnavailableView {
@@ -96,15 +69,7 @@ struct APILocationsView: View {
   }
 }
 
-struct LocationRowData {
-  var title: String
-  var subtitle: String
-  
-  init(location: Location) {
-    self.title = location.name ?? String(localized: "(untitled)")
-    self.subtitle = String(localized: "Lat: \(location.latitude, format: .number.precision(.fractionLength(7))), Long: \(location.longitude, format: .number.precision(.fractionLength(7)))")
-  }
-}
+
 
 #Preview("Regular Response") {
   @Previewable @State var model = APILocationsModel.preview()
