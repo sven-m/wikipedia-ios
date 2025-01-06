@@ -1,18 +1,15 @@
 import SwiftUI
 
-struct LocationRowView: View {
+struct LocationRowView: View  {
   var name: String?
-  var latitude: Double
-  var longitude: Double
+  var coordinates: Coordinates
   
   var body: some View {
     Button {
-      openURL(latitude: latitude, longitude: longitude)
+      openURL()
     } label: {
       Label {
-        let rowData = LocationRowData(name: name,
-                                      latitude: latitude,
-                                      longitude: longitude)
+        let rowData = LocationRowData(name: name, coordinates: coordinates)
         
         VStack(alignment: .leading) {
           Text(rowData.title)
@@ -28,9 +25,8 @@ struct LocationRowView: View {
     }
   }
   
-  private func openURL(latitude: Double, longitude: Double) {
-    if let url = URL.wikipediaURL(latitude: latitude,
-                                  longitude: longitude) {
+  private func openURL() {
+    if let url = URL.wikipediaURL(coordinates: coordinates) {
       UIApplication.shared.open(url)
     }
   }
@@ -40,9 +36,9 @@ struct LocationRowData {
   var title: String
   var subtitle: String
   
-  init(name: String?, latitude: Double, longitude: Double) {
+  init(name: String?, coordinates: Coordinates) {
     self.title = name ?? String(localized: "(untitled)")
-    self.subtitle = String(localized: "Lat: \(latitude, format: .number.precision(.fractionLength(7))), Long: \(longitude, format: .number.precision(.fractionLength(7)))")
+    self.subtitle = String(localized: "Lat: \(coordinates.latitude, format: .number.precision(.fractionLength(7))), Long: \(coordinates.longitude, format: .number.precision(.fractionLength(7)))")
   }
 }
 
@@ -50,6 +46,6 @@ struct LocationRowData {
 
 #Preview {
   List {
-    LocationRowView(name: "Test", latitude: 52, longitude: 4)
+    LocationRowView(name: "Test", coordinates: Coordinates(latitude: 52, longitude: 4))
   }
 }

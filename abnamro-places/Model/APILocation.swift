@@ -1,8 +1,13 @@
+import Foundation
 
-struct APILocation: Hashable {
+struct APILocation: Hashable, CoordinatesConvertible {
   var name: String?
   var latitude: Double
   var longitude: Double
+  
+  var coordinates: Coordinates {
+    Coordinates(latitude: latitude, longitude: longitude)
+  }
 }
 
 extension APILocation: Codable {
@@ -12,3 +17,4 @@ extension APILocation: Codable {
     case longitude = "long"
   }
 }
+

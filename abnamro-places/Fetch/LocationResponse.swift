@@ -1,7 +1,7 @@
 import Foundation
 
 struct LocationsResponse {
-  var locations: [Location]
+  var locations: [APILocation]
 }
 
 extension LocationsResponse: Codable {}

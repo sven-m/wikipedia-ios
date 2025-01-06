@@ -1,27 +1,64 @@
 import Foundation
 import SwiftData
 
+enum SavedLocationValidationError: LocalizedError {
+  case noDraft
+  case duplicateName(name: String, coordinates: Coordinates)
+  case duplicateCoordinates(name: String, coordinates: Coordinates)
+  case emptyName
+  
+  var errorDescription: String? {
+    switch self {
+    case .noDraft:
+      String(localized: "Cannot create a location")
+    case .duplicateName(let name, let coordinates):
+      String(localized: "A location with name \"\(name)\" already exists (coordinates: \(coordinates.latitude),\(coordinates.longitude)")
+    case .duplicateCoordinates(let name, let coordinates):
+      String(localized: "A location with coordinates \(coordinates.latitude),\(coordinates.longitude) already exists (name: \(name)")
+    case .emptyName:
+      String(localized: "Enter a name to save")
+    }
+  }
+}
+
+@MainActor
 @Observable
 class SavedLocationsModel {
   private let container: ModelContainer
-  private let context: ModelContext
   
-  var entities: [LocationEntity] = []
+  var entities: [SavedLocation] = []
   var lastError: Error?
   
-  var draftLocation: LocationEntity?
+  var draftLocation: SavedLocation?
+  
+  var validatedDraftLocation: SavedLocation? {
+    do {
+      try validate()
+      
+      return draftLocation
+    } catch {
+      return nil
+    }
+  }
+  
+  var validationError: SavedLocationValidationError? {
+    do {
+      try validate ()
+      return nil
+    } catch {
+      return error
+    }
+  }
   
   init(container: ModelContainer) {
     self.container = container
-    let context = ModelContext(container)
-    self.context = context
     
     refresh()
   }
   
   func delete(indexSet: IndexSet) {
     for index in indexSet {
-      context.delete(entities[index])
+      container.mainContext.delete(entities[index])
     }
     
     refresh()
@@ -30,8 +67,8 @@ class SavedLocationsModel {
   func refresh() {
     lastError = nil
     do {
-      entities = try context.fetch(
-        FetchDescriptor<LocationEntity>(sortBy: [.init(\.name)])
+      entities = try container.mainContext.fetch(
+        FetchDescriptor<SavedLocation>(sortBy: [.init(\.name)])
       )
     } catch {
       lastError = error
@@ -39,51 +76,56 @@ class SavedLocationsModel {
   }
   
   func draftNewLocation() {
-    draftLocation = LocationEntity()
+    draftLocation = SavedLocation()
   }
   
-  func finishDraft() {
-    guard let draftLocation,
-          draftLocation.isValid else { return }
+  func validate() throws (SavedLocationValidationError) {
+    guard let draftLocation else {
+      throw .noDraft
+    }
     
-    context.insert(draftLocation)
-    self.draftLocation = nil
+    guard !draftLocation.name.isEmpty else {
+      throw .emptyName
+    }
     
-    refresh()
+    let groupedByName = Dictionary(grouping: entities, by: \.name)
+    if let duplicated = groupedByName[draftLocation.name]?.first {
+      throw .duplicateName(name: duplicated.name,
+                           coordinates: duplicated.coordinates)
+    }
+    
+    let groupedByCoordinates = Dictionary(grouping: entities, by: \.coordinates)
+    if let duplicated = groupedByCoordinates[draftLocation.coordinates]?.first {
+      throw .duplicateCoordinates(name: duplicated.name,
+                                  coordinates: duplicated.coordinates)
+    }
+  }
+  
+  func commit() {
+    guard let validatedDraftLocation else { return }
+    
+    do {
+      container.mainContext.insert(validatedDraftLocation)
+      self.draftLocation = nil
+      
+      try container.mainContext.save()
+      refresh()
+    } catch {
+      lastError = error
+    }
   }
 }
 
-@Model
-class LocationEntity {
-  var name: String
-  var latitude: Double
-  var longitude: Double
-  
-  init(name: String = "",
-       latitude: Double = 0.0,
-       longitude: Double = 0.0) {
-    self.name = name
-    self.latitude = latitude
-    self.longitude = longitude
-  }
-}
 
-extension LocationEntity {
-  var isValid: Bool {
-    !name.isEmpty
-    && (-90...90).contains(latitude)
-    && (-180...180).contains(longitude)
-  }
-}
 
 extension SavedLocationsModel {
   static func preview() -> SavedLocationsModel {
     let container = try! ModelContainer(
-      for: LocationEntity.self,
+      for: SavedLocation.self,
       configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
-    context.insert(LocationEntity(name: "Test", latitude: 52, longitude: 4))
+    context.insert(SavedLocation(name: "Test", latitude: 52, longitude: 4))
     try! context.save()
     
     return SavedLocationsModel(container: container)

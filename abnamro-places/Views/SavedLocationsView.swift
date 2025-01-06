@@ -9,10 +9,7 @@ struct SavedLocationsView: View {
       List {
         Section {
           ForEach(model.entities) { entity in
-            
-            LocationRowView(name: entity.name,
-                            latitude: entity.latitude,
-                            longitude: entity.longitude)
+            LocationRowView(name: entity.name, coordinates: entity.coordinates)
           }
           .onDelete { indexSet in
             model.delete(indexSet: indexSet)
@@ -45,9 +42,7 @@ struct SavedLocationsView: View {
         }
       }
       .sheet(item: $model.draftLocation) { draft in
-        AddNewSavedLocationView(draft: draft) {
-          model.finishDraft()
-        }
+        AddNewSavedLocationView(draft: draft, model: model)
       }
       .navigationTitle("Locations (Saved)")
     }

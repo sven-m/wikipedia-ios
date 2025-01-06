@@ -1,17 +1,14 @@
 import Foundation
 
-
-
 extension URL {
-  
-  static func wikipediaURL(latitude: Double, longitude: Double) -> Self? {
+  static func wikipediaURL(coordinates: Coordinates) -> Self? {
     var components = URLComponents()
     components.scheme = "wikipedia"
     components.host = "places"
     components.queryItems = [
       URLQueryItem(
         name: "WMFPlacesLatLong",
-        value: "\(latitude),\(longitude)")
+        value: "\(coordinates.latitude),\(coordinates.longitude)")
     ]
     
     return components.url

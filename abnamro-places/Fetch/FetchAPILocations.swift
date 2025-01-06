@@ -1,6 +1,6 @@
 import Foundation
 
-func fetchAPILocations() async throws (LocationsFetchError) -> [Location] {
+func fetchAPILocations() async throws (LocationsFetchError) -> [APILocation] {
   let (data, response): (Data, URLResponse)
   do {
     (data, response) = try await URLSession.shared.data(from: .api)

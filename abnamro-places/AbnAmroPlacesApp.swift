@@ -5,7 +5,7 @@ import SwiftData
 struct AbnAmroPlacesApp: App {
   @State var apiLocationsModel = APILocationsModel(fetch: fetchAPILocations)
   @State var savedLocationsModel = Result {
-    try SavedLocationsModel(container: ModelContainer(for: LocationEntity.self))
+    try SavedLocationsModel(container: ModelContainer(for: SavedLocation.self))
   }
   
   var body: some Scene {

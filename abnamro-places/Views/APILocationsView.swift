@@ -9,9 +9,7 @@ struct APILocationsView: View {
       List {
         Section {
           ForEach(model.locations ?? [], id: \.self) { location in
-            LocationRowView(name: location.name,
-                            latitude: location.latitude,
-                            longitude: location.longitude)
+            LocationRowView(name: location.name, coordinates: location.coordinates)
           }
         } footer: {
           if model.locations != nil {

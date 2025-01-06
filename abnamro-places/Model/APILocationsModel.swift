@@ -2,18 +2,19 @@ import Foundation
 
 @Observable
 class APILocationsModel {
-  let fetch: () async throws -> [Location]
+  let fetch: () async throws -> [APILocation]
   
-  var locations: [Location]?
+  var locations: [APILocation]?
   var error: Error?
   
-  init(fetch: @escaping () async throws -> [Location]) {
+  init(fetch: @escaping () async throws -> [APILocation]) {
     self.fetch = fetch
   }
   
+  @MainActor
   func refresh() async {
     do {
-      locations = deduplicated(try await self.fetch())
+      locations = Self.deduplicated(try await self.fetch())
       
     } catch {
       self.error = error
@@ -23,8 +24,8 @@ class APILocationsModel {
   /// Deduplicates locations and transforms them into `NavigableCatalogLocations` (navigable into the Wikipedia app)
   /// - Parameter locations: catalog locations, as received from an API
   /// - Returns: `NavigableCatalogLocation` values with a valid `URL`
-  func deduplicated(_ locations: [Location]) -> [Location] {
-    var seen: Set<Location> = []
+  static func deduplicated(_ locations: [APILocation]) -> [APILocation] {
+    var seen: Set<APILocation> = []
     return locations
       .filter { seen.insert($0).inserted }
   }
@@ -33,7 +34,7 @@ class APILocationsModel {
 extension APILocationsModel {
   static func preview() -> APILocationsModel {
     APILocationsModel {
-      [Location(name: "Test", latitude: 1, longitude: 2)]
+      [APILocation(name: "Test", latitude: 1, longitude: 2)]
     }
   }
 }
