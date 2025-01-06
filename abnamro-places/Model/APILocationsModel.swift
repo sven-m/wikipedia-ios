@@ -21,9 +21,6 @@ class APILocationsModel {
     }
   }
   
-  /// Deduplicates locations and transforms them into `NavigableCatalogLocations` (navigable into the Wikipedia app)
-  /// - Parameter locations: catalog locations, as received from an API
-  /// - Returns: `NavigableCatalogLocation` values with a valid `URL`
   static func deduplicated(_ locations: [APILocation]) -> [APILocation] {
     var seen: Set<APILocation> = []
     return locations
