@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct SavedLocationsView: View {
-  var model: SavedLocationsModel
+  @Bindable var model: SavedLocationsModel
   
   var body: some View {
     NavigationStack {
@@ -25,7 +25,7 @@ struct SavedLocationsView: View {
         
         if model.entities?.isEmpty == false {
           Button {
-            addNewLocation()
+            model.draftNewLocation()
           } label: {
             Label {
               Text("Add New Saved Location")
@@ -44,12 +44,13 @@ struct SavedLocationsView: View {
           noSavedLocationsView
         }
       }
+      .sheet(item: $model.draftLocation) { draft in
+        AddNewSavedLocationView(draft: draft) {
+          model.finishDraft()
+        }
+      }
       .navigationTitle("Locations (Saved)")
     }
-  }
-  
-  func addNewLocation() {
-    
   }
   
   func failureView(error: Error) -> some View {
@@ -68,7 +69,7 @@ struct SavedLocationsView: View {
       Text("You have not saved a location yet")
     } actions: {
       Button("Add New Saved Location") {
-        addNewLocation()
+        model.draftNewLocation()
       }
     }
   }

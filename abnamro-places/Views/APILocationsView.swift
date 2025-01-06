@@ -69,7 +69,7 @@ struct APILocationsView: View {
   }
 }
 
-
+ 
 
 #Preview("Regular Response") {
   @Previewable @State var model = APILocationsModel.preview()

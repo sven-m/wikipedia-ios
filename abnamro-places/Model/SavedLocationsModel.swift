@@ -9,6 +9,8 @@ class SavedLocationsModel {
   var entities: [LocationEntity]?
   var lastError: Error?
   
+  var draftLocation: LocationEntity?
+  
   init(container: ModelContainer) {
     self.container = container
     let context = ModelContext(container)
@@ -34,6 +36,20 @@ class SavedLocationsModel {
       lastError = error
     }
   }
+  
+  func draftNewLocation() {
+    draftLocation = LocationEntity()
+  }
+  
+  func finishDraft() {
+    guard let draftLocation,
+          draftLocation.isValid else { return }
+    
+    context.insert(draftLocation)
+    self.draftLocation = nil
+    
+    refresh()
+  }
 }
 
 @Model
@@ -42,10 +58,20 @@ class LocationEntity {
   var latitude: Double
   var longitude: Double
   
-  init(name: String, latitude: Double, longitude: Double) {
+  init(name: String = "",
+       latitude: Double = 0.0,
+       longitude: Double = 0.0) {
     self.name = name
     self.latitude = latitude
     self.longitude = longitude
+  }
+}
+
+extension LocationEntity {
+  var isValid: Bool {
+    !name.isEmpty
+    && (-90...90).contains(latitude)
+    && (-180...180).contains(longitude)
   }
 }
 
@@ -59,7 +85,6 @@ extension SavedLocationsModel {
     context.insert(LocationEntity(name: "Test", latitude: 52, longitude: 4))
     try! context.save()
     
-    let model = SavedLocationsModel(container: container)
-    return model
+    return SavedLocationsModel(container: container)
   }
 }
