@@ -40,9 +40,6 @@ struct AddNewSavedLocationView: View {
               draft.latitude = mapCameraUpdateContext.region.center.latitude
               draft.longitude = mapCameraUpdateContext.region.center.longitude
             }
-            .mapControls {
-              MapUserLocationButton()
-            }
             .aspectRatio(1, contentMode: .fit)
             .listRowInsets(.init())
           
