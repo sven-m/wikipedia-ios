@@ -128,9 +128,9 @@ enum SavedLocationValidationError: LocalizedError, Equatable {
   var errorDescription: String? {
     switch self {
     case .duplicateName(let name, let coordinates):
-      String(localized: "A location with name \"\(name)\" already exists (coordinates: \(coordinates.latitude),\(coordinates.longitude)")
+      String(localized: "A location with name \"\(name)\" already exists (coordinates: \(coordinates.latitude),\(coordinates.longitude))")
     case .duplicateCoordinates(let name, let coordinates):
-      String(localized: "A location with coordinates \(coordinates.latitude),\(coordinates.longitude) already exists (name: \(name)")
+      String(localized: "A location with coordinates \(coordinates.latitude),\(coordinates.longitude) already exists (name: \(name))")
     case .emptyName:
       String(localized: "Enter a name to save")
     }
