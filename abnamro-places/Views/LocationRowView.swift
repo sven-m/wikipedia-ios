@@ -17,6 +17,7 @@ struct LocationRowView: View  {
           Text(rowData.subtitle)
             .font(.caption)
             .foregroundStyle(.secondary)
+            .accessibilityIdentifier("Coordinates")
           
         }
         .tint(.primary)

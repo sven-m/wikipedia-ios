@@ -157,6 +157,7 @@ class PlacesViewController: ViewController, UISearchBarDelegate, ArticlePopoverV
         
         let mapViewFrame = mapContainerView.bounds
         mapView = MapView(frame: mapViewFrame)
+        mapView.accessibilityIdentifier = "Map view"
         mapView.delegate = self
 
         // Setup map view
@@ -1943,6 +1944,11 @@ class PlacesViewController: ViewController, UISearchBarDelegate, ArticlePopoverV
     /// Provides the entry point for the location deep-link into the Places tab
     /// - Parameter location: the location to pan the map to
     @objc public func showLocation(_ location: CLLocation) {
+        // ensure view is loaded, as this method might be called early and
+        // the below actions will crash the app if performed when the view is
+        // not loaded
+        _ = view
+      
         panMapToNextLocationUpdate = false // suppresses the location update triggered after initial appearance of places tab
         zoomAndPanMapView(toLocation: location)
     }
@@ -2351,6 +2357,11 @@ extension PlacesViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         regionDidChange()
+//      mapView.accessibilityLabel = "Map with center coordinates \(mapView.region.center.latitude),\(mapView.region.center.longitude)"
+      mapView.accessibilityValue = "\(mapView.region.center.latitude),\(mapView.region.center.longitude)"
+      print("ID", mapView.accessibilityIdentifier)
+      print("ID", mapView.accessibilityValue)
+      
     }
     
     func mapView(_ mapView: MKMapView, didSelect annotationView: MKAnnotationView) {

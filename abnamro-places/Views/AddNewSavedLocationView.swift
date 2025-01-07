@@ -51,6 +51,7 @@ struct AddNewSavedLocationView: View {
             Spacer()
             Text(draft.latitude, format: .number)
               .foregroundStyle(.secondary)
+              .accessibilityIdentifier("Latitude Value")
           }
           
           HStack {
@@ -58,6 +59,7 @@ struct AddNewSavedLocationView: View {
             Spacer()
             Text(draft.longitude, format: .number)
               .foregroundStyle(.secondary)
+              .accessibilityIdentifier("Longitude Value")
           }
         }
         

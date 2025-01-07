@@ -5,7 +5,9 @@ struct MainTabView: View {
   var apiLocationsModel: APILocationsModel
   var savedLocationsModel: Result<SavedLocationsModel, Error>
   
-  @State var isShowingURLErrorAlert = false
+  @State var isShowingURLNotAcceptedAlert = false
+  @State var isShowingMalformedURLAlert = false
+  
   @Environment(\.openURL) var openURL
   
   var body: some View {
@@ -23,20 +25,27 @@ struct MainTabView: View {
         }
     }
     .environment(\.openWikipediaWithCoordinates, openURL(coordinates:))
-    .alert("Cannot navigate to Wikipedia", isPresented: $isShowingURLErrorAlert) {
+    .alert("Cannot navigate to Wikipedia", isPresented: $isShowingMalformedURLAlert) {
       Button("OK", role: .cancel) {}
     } message: {
-      Text("An unknown error occurred")
+      Text("An internal error occurred")
+    }
+    .alert("Cannot navigate to Wikipedia", isPresented: $isShowingURLNotAcceptedAlert) {
+      Button("OK", role: .cancel) {}
+    } message: {
+      Text("Please check if Wikipedia is installed")
     }
   }
   
   private func openURL(coordinates: Coordinates) {
     guard let url = URL.wikipediaURL(coordinates: coordinates) else {
-      isShowingURLErrorAlert = true
+      isShowingMalformedURLAlert = true
       return
     }
     
-    openURL(url)
+    openURL(url) { accepted in
+      isShowingURLNotAcceptedAlert = !accepted
+    }
   }
   
   @ViewBuilder
@@ -71,6 +80,6 @@ struct MainTabView: View {
   MainTabView(
     apiLocationsModel: apiLocationsModel,
     savedLocationsModel: .failure(NSError(domain: "preview", code: -1)),
-    isShowingURLErrorAlert: true
+    isShowingURLNotAcceptedAlert: true
   )
 }

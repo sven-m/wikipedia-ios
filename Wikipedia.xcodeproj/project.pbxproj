@@ -4841,6 +4841,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		261FC6F12D2D473900D5E92E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/Coordinates.swift,
+				"Model/URL+Wikipedia.swift",
+			);
+			target = 263621402D273281009D6176 /* abnamro-placesUITests */;
+		};
 		268C16F72D2C6A8C00461F6E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -4858,7 +4866,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		263621292D27327F009D6176 /* abnamro-places */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (268C16F72D2C6A8C00461F6E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "abnamro-places"; sourceTree = "<group>"; };
+		263621292D27327F009D6176 /* abnamro-places */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (268C16F72D2C6A8C00461F6E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 261FC6F12D2D473900D5E92E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "abnamro-places"; sourceTree = "<group>"; };
 		2636213A2D273281009D6176 /* abnamro-placesTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "abnamro-placesTests"; sourceTree = "<group>"; };
 		263621442D273281009D6176 /* abnamro-placesUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "abnamro-placesUITests"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
