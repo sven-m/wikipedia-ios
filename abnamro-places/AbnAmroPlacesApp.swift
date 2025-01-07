@@ -14,6 +14,7 @@ struct AbnAmroPlacesApp: App {
         apiLocationsModel: apiLocationsModel,
         savedLocationsModel: savedLocationsModel
       )
+      
     }
   }
 }

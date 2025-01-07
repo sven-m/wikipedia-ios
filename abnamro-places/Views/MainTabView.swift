@@ -5,6 +5,9 @@ struct MainTabView: View {
   var apiLocationsModel: APILocationsModel
   var savedLocationsModel: Result<SavedLocationsModel, Error>
   
+  @State var isShowingURLErrorAlert = false
+  @Environment(\.openURL) var openURL
+  
   var body: some View {
     TabView {
       APILocationsView(model: apiLocationsModel)
@@ -19,6 +22,21 @@ struct MainTabView: View {
           Image(systemName: "folder")
         }
     }
+    .environment(\.openWikipediaWithCoordinates, openURL(coordinates:))
+    .alert("Cannot navigate to Wikipedia", isPresented: $isShowingURLErrorAlert) {
+      Button("OK", role: .cancel) {}
+    } message: {
+      Text("An unknown error occurred")
+    }
+  }
+  
+  private func openURL(coordinates: Coordinates) {
+    guard let url = URL.wikipediaURL(coordinates: coordinates) else {
+      isShowingURLErrorAlert = true
+      return
+    }
+    
+    openURL(url)
   }
   
   @ViewBuilder
@@ -47,11 +65,12 @@ struct MainTabView: View {
   )
 }
 
-#Preview("Database Error") {
+#Preview("Errors") {
   @Previewable @State var apiLocationsModel = APILocationsModel.preview()
   
   MainTabView(
     apiLocationsModel: apiLocationsModel,
-    savedLocationsModel: .failure(NSError(domain: "preview", code: -1))
+    savedLocationsModel: .failure(NSError(domain: "preview", code: -1)),
+    isShowingURLErrorAlert: true
   )
 }

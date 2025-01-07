@@ -4847,10 +4847,11 @@
 				Model/APILocation.swift,
 				Model/APILocationsModel.swift,
 				Model/Coordinates.swift,
+				Model/LocationRowData.swift,
 				Model/SavedLocation.swift,
 				Model/SavedLocationsModel.swift,
 				"Model/URL+Wikipedia.swift",
-				Views/LocationRowView.swift,
+				Views/Environment.swift,
 			);
 			target = 263621362D273281009D6176 /* abnamro-placesTests */;
 		};
