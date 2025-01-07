@@ -1,5 +1,12 @@
 import Foundation
 
+
+/// The APILocationModel is responsible for obtaining the locations from an (injected) API dependency
+/// and ensures the locations are deduplicated.
+///
+/// I chose to add some contrived functionality to give this class a reason to exist for the purpose of
+/// illustration. I could also have left out a model for the APILocationsView, and not having a model class in
+/// this particular case can be a logical alternative.
 @MainActor
 @Observable
 class APILocationsModel {
@@ -29,6 +36,8 @@ class APILocationsModel {
 }
 
 extension APILocationsModel {
+  /// Creates instance of the model that returns fake data, useful for SwiftUI previews
+  /// - Returns: the model with a mocked fetch function
   static func preview() -> APILocationsModel {
     APILocationsModel {
       [APILocation(name: "Test", latitude: 1, longitude: 2)]

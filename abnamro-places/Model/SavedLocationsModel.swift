@@ -138,6 +138,9 @@ enum SavedLocationValidationError: LocalizedError, Equatable {
 }
 
 extension SavedLocationsModel {
+  /// Creates an instance of the model that is given an in-memory Swift Data container, which is useful for
+  /// unit tests and SwiftUI previews.
+  /// - Returns: a model instance with an in-memory Swift Data container with a single entity.
   static func preview() -> SavedLocationsModel {
     let container = try! ModelContainer(
       for: SavedLocation.self,

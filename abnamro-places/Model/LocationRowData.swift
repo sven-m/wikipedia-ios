@@ -1,5 +1,6 @@
 import Foundation
 
+/// Encapsulated location -> view data translation to enable testing it separately from the view.
 struct LocationRowData {
   var title: String
   var subtitle: String

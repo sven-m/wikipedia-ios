@@ -19,7 +19,7 @@ final class AbnAmroPlacesUITests: XCTestCase {
   
   /// Tests whether the Wikipedia app can be launched with a URL
   @MainActor
-  func testLaunchWikipediaWithURLFromNotRunning() throws (UITestError) {
+  func testLaunchWikipediaWithURLFromNotRunning() throws (TestError) {
     wikipediaApp.activate()
     normalizeWikipediaUIState()
     wikipediaApp.terminate()
@@ -39,7 +39,7 @@ final class AbnAmroPlacesUITests: XCTestCase {
   
   /// Tests whether the Wikipedia app can be brought to the foreground with a URL
   @MainActor
-  func testLaunchWikipediaWithURLFromBackground() throws (UITestError) {
+  func testLaunchWikipediaWithURLFromBackground() throws (TestError) {
     wikipediaApp.launch()
     normalizeWikipediaUIState()
     springboard.activate()
@@ -59,7 +59,7 @@ final class AbnAmroPlacesUITests: XCTestCase {
   
   /// Tests whether the Wikipedia app can be direct to show the map while already in foreground with a URL
   @MainActor
-  func testLaunchWikipediaWithURLInForeground() throws (UITestError) {
+  func testLaunchWikipediaWithURLInForeground() throws (TestError) {
     wikipediaApp.activate()
     normalizeWikipediaUIState()
     
@@ -170,8 +170,12 @@ final class AbnAmroPlacesUITests: XCTestCase {
     wikipediaApp.tabBars.buttons["Explore"].tap()
   }
   
+  
+  /// Creates a new saved location in the Places app.
+  /// 
+  /// - Returns: the coordinates of the location that ended up being created
   @MainActor
-  private func createCustomLocationInPlacesApp() throws -> Coordinates {
+  private func createCustomLocationInPlacesApp() throws (TestError) -> Coordinates {
     placesApp.tabBars.buttons["Saved"].tap()
     
     // ensure no item with the same name exists
@@ -194,7 +198,7 @@ final class AbnAmroPlacesUITests: XCTestCase {
     
     guard let latitude = try? parser.parse(placesApp.staticTexts["Latitude Value"].label),
           let longitude = try? parser.parse(placesApp.staticTexts["Longitude Value"].label) else {
-      throw UITestError.coordinateValuesNotReadable
+      throw .coordinateValuesNotReadable
     }
     
     placesApp.buttons["Save"].tap()
@@ -202,6 +206,19 @@ final class AbnAmroPlacesUITests: XCTestCase {
     return Coordinates(latitude: latitude, longitude: longitude)
   }
   
+  /// Checks that the center coordinates from the MapKit map inside the Wikipedia app are within specified
+  /// bounds.
+  ///
+  /// The map view is located in the view hierarchy using the "Map view" accessibility identifier and its
+  /// accessibility value is used to obtain the coordinates, which are encoded in a string as <lat>,<long>.
+  ///
+  /// The method will wait for at most 10 seconds for the coordinates to become within the specified,
+  /// bounds, or it will fail the test that this method is run in.
+  ///
+  /// - Parameters:
+  ///   - latitude: the latitude in degrees
+  ///   - longitude: the longitude in degrees
+  ///   - accuracy: the latitude and longitude margin, expressed in degrees
   @MainActor
   private func waitForMapViewCoordinatesInWikipedia(
     latitude: Double,
@@ -224,7 +241,7 @@ final class AbnAmroPlacesUITests: XCTestCase {
     wait(for: [exp], timeout: 10)
   }
   
-  enum UITestError: Error {
+  enum TestError: Error {
     case wikipediaAppDidNotLaunch
     case mapViewDidNotAppear
     case mapViewWithInvalidAccessibiltyValue(String)
@@ -234,7 +251,7 @@ final class AbnAmroPlacesUITests: XCTestCase {
   }
   
   
-  /// This metehod removes an app using the app's title by navigating through Springboard.
+  /// Removes an app using the app's title by navigating through Springboard.
   /// - Parameter title: the display name of the app, as it is shown in the home screen / app library
   @MainActor
   func removeAppIfNeeded(title: String) {

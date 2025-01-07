@@ -1,6 +1,8 @@
 import SwiftUI
 import SwiftData
 
+/// The main tab view is responsible for the general view structure, high level error presentation and
+/// navigation logic
 struct MainTabView: View {
   var apiLocationsModel: APILocationsModel
   var savedLocationsModel: Result<SavedLocationsModel, Error>
