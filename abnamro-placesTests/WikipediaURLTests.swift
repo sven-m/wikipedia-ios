@@ -12,7 +12,7 @@ struct WikipediaURLTests {
   
   @Test("Coordinates with non-integer values result in a wellformed URL")
   func decimals() async throws {
-    let url = URL.wikipediaURL(coordinates: Coordinates(latitude: 1.23456, longitude: 2.344567))
+    let url = URL.wikipediaURL(coordinates: Coordinates(latitude: 1.23456, longitude: 2.34567))
     
     #expect(url == URL(string: "wikipedia://places?WMFPlacesLatLong=1.23456,2.34567"))
   }
