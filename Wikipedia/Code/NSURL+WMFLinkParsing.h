@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <WMF/NSURL+WMFLinkParsing.h>
+#import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

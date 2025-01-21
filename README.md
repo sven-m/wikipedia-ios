@@ -1,3 +1,182 @@
+# ABN AMRO iOS Assignment Preamble
+
+This is an adjusted version of the Wikipedia iOS app project, containing the
+implementation of ABN Amro's iOS assignment.
+
+Following this top-level section is the rest of the Wikipedia iOS project's 
+original README content.
+
+## How to run the customized Wikipedia app and the demo app
+
+- Open the project in Xcode
+- Select a simulator target (see design decisions)
+- Run the `Wikipedia` app target
+- Run the `abnamro-places` app target
+
+### Tests
+
+Select the `abnamro-places` scheme and run these test targets:
+- `abnamro-placesTests`
+- `abnamro-placesUITests`  
+
+## Requirements
+
+- Wikipedia iOS can be called from other apps with a specific URL to show a 
+specific location in the places tab
+- A demo app that demonstrates this feature
+
+The specific requirements are in `ios-assignment-2024.pdf`, located in the root
+of the repository.
+
+## High Level Implementation
+
+### Wikipedia App
+
+The Wikipedia app now also accepts URLs in the following format:
+
+```
+wikipedia://places?WMFPlacesLatLong=52.5,4.56
+```
+
+Opening a URL of this kind on the device will trigger iOS to call one of the 
+following methods in the Wikipedia app, depending on the app state:
+- `UISceneDelegate.scene(_:, openURLContexts:)` (app already running))
+- `scene(_:, willConnectTo:, options:)` (when launched, with 
+  `options.urlContexts` being populated)
+
+Wikipedia already has custom URL schemes implemented, and the current 
+implementation makes use of what is already there. The existing implementation
+of the handling for the `wikipedia://places` URl is extended with a 
+`WMFPlacesLatLong` query string parameter.
+
+The `PlacesViewController` is updated with a new `show(location:)` method that
+will center the given location on the map.
+
+### Demo App
+
+The demo app is implemented using SwiftUI with a main tab scene and two main
+views. Both views have a model that either uses a web API or Swift Data for its
+data.
+
+The "saved locations" view uses an Apple Map, sadly without location support, 
+because I was out of time.
+
+The models and utility methods in the app are unit tested and there are UI tests
+for testing the Wikipedia app's URL handling and for the demo app's 
+functionality, including triggering the Wikipedia app with the right URL. 
+
+## Project structure
+
+The implementation is housed in a fork of the Wikipedia iOS repository, in the
+branch `feature/abnamro-ios-places`. The reason for this is simply because it is
+ easy.
+
+The changes to the wikipedia app have been made in the `Wikipedia` app target in
+ the main project.
+
+The additional demo app and its tests are implemented using a set of targets in
+the main project:
+- `abmamro-places`
+- `abmamro-placesTests`
+- `abmamro-placesUITests`
+
+## Design Decisions / Rationale
+
+### Signing and running on device
+
+I am not supporting running this version of Wikipedia on a device.
+
+I have deliberately left the team to Wikipedia's original `AKK7J2GV64` and
+decided _not_ to change the bundle IDs, which would have been needed to support
+running it on a device. Changing the bundle ID may require references to this 
+bundle ID in other places to be changed and an App ID to be setup in my own
+(paid) account. Although fixing signing issues is definitely a good skill to 
+demonstrate, being able to see that it works requires doing pretty much the 
+same work on your end, so I have decided to leave this alone.
+
+If you're disappointed, please do let me know.
+
+### URL
+
+On iOS, the only proper way to launch one app from another app while passing
+parameters is using URLs. The chosen method is to use a custom scheme. As the
+Wikipedia app already has custom schemes implemented, we make use of the already
+ available `wikipedia:` scheme.
+
+The following command allows us to test launching URLs on the simulator, without
+needing a demo app just yet:
+```
+xcrun simctl openurl booted 'wikipedia://places?WMFPlacesLatLong=52.3547498,4.8339215'
+```
+
+### Tightly Integrating SwiftData into Model
+
+Whereas the `APILocationsModel` has a nicely injectable dependency, the
+`SavedLocationsModel` needs a `ModelContext`. Normally, I would try to keep the
+models as pure as possible, but SwiftData containers are easily testable, 
+because they can be configured to persist data only in memory.
+
+For SwiftUI previews and unit tests this is already very useful. For larger
+scale projects it I think it pays to keep the SwiftData out of your models, in 
+case you every want to move away from Swift Data without having to refactor
+everything.
+
+### Not using the Wikipedia UI Tests target
+
+I added the tests for the Wikipedia app to my new target
+`abnamro-placesUITests`, because there was an issue that prevented my tests from
+working normally in the Wikipedia UI Tests target.
+
+At a later point, I found out that it was this line, causing the unexpected view
+controller to be shown:
+```swift
+// ExploreViewController.swift:102
+#if UITEST
+        presentUITestHelperController()
+#endif
+```
+
+At first I could not figure out where this weird screen was coming from, but
+when I figured it out, I decided to leave it at this. It's more logical to have
+the tests in the Wikipedia target, but I think this is not particularly 
+interesting problem to solve at this point.
+
+#### Custom HTTPS URLs (alternative considered)
+
+The app already makes use of the universal links feature of iOS, so we could
+choose to piggy back on this implementation. This would mean we would need to
+need to use the `https` scheme in the URL and use one of its associated domains
+as the host, such as `wikipedia.org`, but then add either a custom path, query 
+string parameter or fragment.
+
+Examples:
+```
+https://wikipedia.org/wiki/places/52.3547498,4.8339215
+https://wikipedia.org/wiki?coordinates=52.3547498,4.8339215
+https://wikipedia.org/wiki/#coordinates=52.3547498,4.8339215
+```
+
+The
+[apple-app-site-association](https://wikipedia.org/apple-app-site-association)
+file hosted by Wikipedia lists several `applinks` items, all of them specifying
+the `/wiki/*` subpath, which means we have to use this subpath, otherwise our 
+links will not trigger the app, but simply to to the website.
+
+This can work, but implementing it like this still does not entirely prevent the
+possibility of the browser being used to open these URLs, which will lead to
+confusing results, such as a 4xx, 5xx response or simply loading the Wikipedia 
+homepage wihout anything happening.
+
+Before moving on to the custom scheme implementation, we will use the universal
+links as an intermediate version to reduce the scope of single changes.
+
+Before having implemented the demo application or UI tests, we use the following
+command-line command to test the URLs:
+
+```
+xcrun simctl openurl booted 'https://en.wikipedia.org/wiki#coordinates=1,2'
+```
+
 # Wikipedia iOS
 The official Wikipedia iOS app.
 

@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, WMFUserActivityType) {
@@ -47,6 +48,9 @@ extern NSString *const WMFNavigateToActivityNotification;
 - (nullable NSURL *)wmf_linkURL;
 
 - (NSURL *)wmf_contentURL;
+
+/// Returns a CLLocation object representing the location of the places tab deep-link, if the activity represents one, otherwise @c nil .
+- (nullable CLLocation *)wmf_placesLinkLocation;
 
 + (NSURL *)wmf_baseURLForActivityOfType:(WMFUserActivityType)type;
 

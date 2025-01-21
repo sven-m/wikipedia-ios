@@ -1179,7 +1179,7 @@ NSString *const WMFLanguageVariantAlertsLibraryVersion = @"WMFLanguageVariantAle
             return YES;
         case WMFUserActivityTypeSearchResults:
             return [activity wmf_searchTerm] != nil;
-        case WMFUserActivityTypeLink:
+      case WMFUserActivityTypeLink:
             return [activity wmf_linkURL] != nil;
         default:
             return NO;
@@ -1220,11 +1220,17 @@ NSString *const WMFLanguageVariantAlertsLibraryVersion = @"WMFLanguageVariantAle
             [self dismissPresentedViewControllers];
             [self setSelectedIndex:WMFAppTabTypePlaces];
             [self.currentTabNavigationController popToRootViewControllerAnimated:animated];
-            NSURL *articleURL = activity.wmf_linkURL;
-            if (articleURL) {
+            NSURL *linkURL = activity.wmf_linkURL;
+            CLLocation *location = activity.wmf_placesLinkLocation;
+            if (linkURL || location) {
                 // For "View on a map" action to succeed, view mode has to be set to map.
                 [[self placesViewController] updateViewModeToMap];
-                [[self placesViewController] showArticleURL:articleURL];
+            }
+            if (linkURL) {
+                [[self placesViewController] showArticleURL:linkURL];
+            }
+            if (location) {
+                [[self placesViewController] showLocation:location];
             }
         } break;
         case WMFUserActivityTypeContent: {
